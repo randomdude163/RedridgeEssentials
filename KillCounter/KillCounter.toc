@@ -1,0 +1,4 @@
+## Interface: 11400
+## Title: Honorable Kill Counter
+## Notes: Counts honorable kills per session and sends a message to the group chat.
+KillCounter.lua

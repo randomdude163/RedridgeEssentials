@@ -1,0 +1,11 @@
+## Interface: 20501
+## Title: AutoFlex
+## Notes: Automatically flexes on anyone in the enemy faction who dies near you.
+## Author: <Redridge Police>
+## Version: 1.0
+## SavedVariables: NUM_PEOPLE_FARTED_ON
+
+AutoFlex.lua
+
+# Based on AutoFart by Techie
+# Github: https://github.com/techiew/WoW-Addons
