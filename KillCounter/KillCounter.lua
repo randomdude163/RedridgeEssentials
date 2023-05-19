@@ -11,12 +11,17 @@ myFrame:Show()
 
 -- Create a new text string to display the number of honorable kills and kills per hour
 local myText = myFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-myText:SetPoint("CENTER", -30, 0)
+myText:SetPoint("LEFT", 0, 0)
 myText:SetText("Honorable Kills: 0")
 
 local killsPerHourText = myFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-killsPerHourText:SetPoint("CENTER", -24, -15)
+killsPerHourText:SetPoint("LEFT", 0, -15)
 killsPerHourText:SetText("Kills per hour: 0")
+
+-- Create a new text string to display the session start time
+local startTimeText = myFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+startTimeText:SetPoint("LEFT", 0, -30)  -- Change position according to your needs
+startTimeText:SetText("Session Start: N/A")  -- This will be updated when session starts
 
 -- Variables to track the number of kills and the time elapsed
 local numKills = 0
@@ -34,7 +39,7 @@ end
 local function OnEvent(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
         -- Reset the kill count when the player enters the world
-        myText:SetText("Honorable Kills: 0")
+        myText:SetText("Player Kills    : 0")
         numKills = 0
         startTime = GetTime()
         UpdateKillsPerHour()
@@ -43,6 +48,10 @@ local function OnEvent(self, event, ...)
         self:SetScript("OnUpdate", function(self, elapsed)
             UpdateKillsPerHour()
         end)
+
+        -- Set start time and update the text string
+        local sessionStart = date("%H:%M")  -- Adjust the format according to your needs
+        startTimeText:SetText("Session Start : " .. sessionStart)
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
         local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
         if eventType == "PARTY_KILL" then
@@ -51,7 +60,7 @@ local function OnEvent(self, event, ...)
             if destType == COMBATLOG_OBJECT_TYPE_PLAYER and destIsPlayer and bit.band(destFlags, COMBATLOG_OBJECT_REACTION_MASK) == COMBATLOG_OBJECT_REACTION_HOSTILE then
                 -- Increment the kill count and update the text string
                 numKills = numKills + 1
-                myText:SetText("Honorable Kills: " .. numKills)
+                myText:SetText("Player Kills    : " .. numKills)
                 
                 -- Announce the kill to group chat
                 local killMessage = string.gsub("Enemyplayername abgeknallt!", "Enemyplayername", destName)
