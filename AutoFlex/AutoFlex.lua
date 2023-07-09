@@ -1,19 +1,3 @@
-
-SLASH_AUTOFART1 = "/autofart"
-
-local loaded = false
-
--- Handle slash commands
-SlashCmdList["AUTOFART"] = function(msg)
-	
-	if not loaded then return end
-	
-	if msg == "" then
-		print("Number of people farted on: " .. NUM_PEOPLE_FARTED_ON)
-	end
-	
-end
-
 -- Set up our frame
 local frame = CreateFrame("Frame", "AutoFartFrame")
 frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -21,20 +5,6 @@ frame:RegisterEvent("ADDON_LOADED")
 
 -- Handle events
 frame:SetScript("OnEvent", function(self, event, ...)	
-
-	if event == "ADDON_LOADED" then
-		local arg1 = ...
-		
-		if arg1 == "AutoFart" then
-		
-			if NUM_PEOPLE_FARTED_ON == nil then
-				NUM_PEOPLE_FARTED_ON = 0
-			end
-			
-			loaded = true
-		end
-
-	end
 
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then
 		local arg1, combatEvent, arg3, arg4, 
@@ -66,7 +36,6 @@ frame:SetScript("OnEvent", function(self, event, ...)
 		end
 
 		DoEmote("FLEX", name)
-		NUM_PEOPLE_FARTED_ON = NUM_PEOPLE_FARTED_ON + 1
 	end
 	
 end)
