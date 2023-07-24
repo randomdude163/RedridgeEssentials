@@ -1,0 +1,5 @@
+## Interface: 11200
+## Title: Zone Monitor
+## Notes: Monitors the current zone and alerts when high-level players are incoming or leaving.
+## Author: YourName
+ZoneMonitor.lua
