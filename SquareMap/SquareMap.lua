@@ -1,19 +1,19 @@
 local escapes = {
-    ["|c%x%x%x%x%x%x%x%x"] = "", -- color start
-    ["|r"] = "", -- color end
-    ["|H.-|h(.-)|h"] = "%1", -- links
-    ["|T.-|t"] = "", -- textures
-    ["{.-}"] = "", -- raid target icons
+	["|c%x%x%x%x%x%x%x%x"] = "", -- color start
+	["|r"] = "",                 -- color end
+	["|H.-|h(.-)|h"] = "%1",     -- links
+	["|T.-|t"] = "",             -- textures
+	["{.-}"] = "",               -- raid target icons
 }
 
 targetBtn = CreateFrame("Button", "targetBtn", UIParent, "BaumMapSecureActionButtonTemplate")
 
 local function unescape(str)
-    for k, v in pairs(escapes) do
-        str = gsub(str, k, v)
-    end
+	for k, v in pairs(escapes) do
+		str = gsub(str, k, v)
+	end
 
-    for substr in str:gmatch("%S+") do return substr end
+	for substr in str:gmatch("%S+") do return substr end
 end
 
 function BM_Click_Target(button)
@@ -26,10 +26,10 @@ function BM_Click_Target(button)
 		-- DEFAULT_CHAT_FRAME:AddMessage("x "..x)
 		-- DEFAULT_CHAT_FRAME:AddMessage("y "..y)
 		targetBtn:ClearAllPoints()
-		targetBtn:SetPoint("CENTER", UIParent, 0, -250)		
+		targetBtn:SetPoint("CENTER", UIParent, 0, -250)
 		targetBtn:SetWidth(140)
 		targetBtn:SetHeight(140)
-		targetBtn:SetAttribute("macrotext", "/targetexact "..name)
+		targetBtn:SetAttribute("macrotext", "/targetexact " .. name)
 		targetBtn:Show()
 		C_Timer.After(0.4, function() targetBtn:Hide() end)
 	end
@@ -65,30 +65,31 @@ function BM_Setup()
 		end
 	end)
 
-
 	local hideAll = {
-		"MinimapBorder",			-- 大圈
+		"MinimapBorder",         -- Outer border
 		"MinimapBorderTop",
-		"MinimapNorthTag",			-- 指北針
-		"MiniMapWorldMapButton",	-- 世界地圖
-		"MinimapZoneTextButton",	-- 區域名字
-		"MinimapZoomIn",			-- 放大
-		"MinimapZoomOut",			-- 縮小
-		"GameTimeFrame",			-- 時間
+		"MinimapNorthTag",       -- Compass
+		"MiniMapWorldMapButton", -- World map button
+		"MinimapZoneTextButton", -- Zone text
+		"MinimapZoomIn",         -- Zoom in
+		"MinimapZoomOut",        -- Zoom out
+		"GameTimeFrame",         -- Time button
 		"SubZoneTextFrame",
 		"MinimapToggleButton"
 	}
+
 	for i, v in pairs(hideAll) do
-		getglobal(v):Hide()
+		local element = getglobal(v)
+		if element then
+			element:Hide()
+		else
+			print("UI element not found:", v) -- Debug message
+		end
 	end
 
 	Minimap:SetPoint("CENTER", UIParent, 0, -250)
 	Minimap:SetMaskTexture("Interface\\BUTTONS\\WHITE8X8")
 	hide_clock()
-	
 end
 
-
-
 BM_Setup()
-
