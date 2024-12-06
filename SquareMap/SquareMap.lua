@@ -87,6 +87,8 @@ function BM_Setup()
 		end
 	end
 
+	Minimap:SetStaticPOIArrowTexture("")
+
 	Minimap:SetPoint("CENTER", UIParent, 0, -250)
 	Minimap:SetMaskTexture("Interface\\BUTTONS\\WHITE8X8")
 	hide_clock()
