@@ -48,26 +48,24 @@ local function hide_minimap_clock_frame()
 end
 
 local function hide_unwanted_minimap_elements()
-	local hideAll = {
-		"MinimapBorder",   -- Outer border
-		"MinimapBorderTop",
-		"MinimapNorthTag", -- Compass
-		"MinimapZoneTextButton", -- Zone text
-		"MinimapZoomIn",   -- Zoom in
-		"MinimapZoomOut",  -- Zoom out
-		"GameTimeFrame",   -- Time button
-		"SubZoneTextFrame",
-		"MinimapToggleButton"
-	}
+    local hideAll = {
+        "MinimapBorder",   -- Outer border
+        "MinimapBorderTop",
+        "MinimapNorthTag", -- Compass
+        "MinimapZoneTextButton", -- Zone text
+        "MinimapZoomIn",   -- Zoom in
+        "MinimapZoomOut",  -- Zoom out
+        "GameTimeFrame",   -- Time button
+        "SubZoneTextFrame",
+        "MinimapToggleButton",
+    }
 
-	for i, v in pairs(hideAll) do
-		local element = getglobal(v)
-		if element then
-			element:Hide()
-		else
-			print("UI element not found:", v)
-		end
-	end
+    for _, frameName in ipairs(hideAll) do
+        local frame = _G[frameName]
+        if frame then
+            frame:Hide()
+        end
+    end
 
 	Minimap:SetStaticPOIArrowTexture("") -- remove arrow that points to nearest town
 	hide_minimap_clock_frame()
