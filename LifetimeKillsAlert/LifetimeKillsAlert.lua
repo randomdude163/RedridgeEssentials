@@ -1,4 +1,5 @@
--- Create the frame and register events
+-- This simple AddOn displays a popup dialog when the player reaches a certain number of honorable kills.
+-- Can be used if you want to make a screenshot of a specific number of honorable kills.
 local frame = CreateFrame("FRAME", "HonorableKillAlertFrame")
 frame:RegisterEvent("PLAYER_ENTERING_WORLD")
 frame:RegisterEvent("PLAYER_PVP_KILLS_CHANGED")
@@ -16,7 +17,7 @@ StaticPopupDialogs["HONORABLE_KILL_ALERT"] = {
 }
 
 local function checkHonorableKills()
-    local honorableKills, dishonorableKills = GetPVPLifetimeStats() -- Get the lifetime PvP stats
+    local honorableKills, dishonorableKills = GetPVPLifetimeStats()
     if honorableKills >= alertThreshold then
         -- Show a popup dialog
         StaticPopup_Show ("HONORABLE_KILL_ALERT", honorableKills)
