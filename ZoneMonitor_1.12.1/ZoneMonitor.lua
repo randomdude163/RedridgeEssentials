@@ -1,8 +1,21 @@
+-- This AddOn monitors the zone the player is on for the arrival and departure of high level players.
+-- It is intended for spy characters in PvP/Ganking zones like Redridge Mountains.
+
+-- It uses the /who command to get a list of players in the zone and compares it to the previous list to detect changes.
+-- When a player enters the zone, a message is displayed with the names of the players who entered.
+-- When a player leaves the zone, a message is displayed with the names of the players who left.
+-- The level threshold for players to be considered is set to 32 by default, but can be changed in the code.
+-- The interval between /who queries is set to 10 seconds by default, but can also be changed in the code.
+
+-- Adjust the levelThreshold and interval variables here.
 local levelThreshold = 32
-local interval = 10
+local interval = 10 -- seconds
+---------------------------------------------------------
+
+
 local lastUpdate = GetTime()
 local whoScanDelay = 1 -- 1-second delay to give the server enough time to provide the results
-local lastPlayerList = {} -- Add this variable to store the list of detected players from the previous check
+local lastPlayerList = {}
 
 local function WhoQuery()
     local zone = GetZoneText()
@@ -66,9 +79,9 @@ local function ShowAlert(playerList, alertType)
     getglobal(alertFrameName):Show()
 
     if alertType == "enter" then
-        PlaySoundFile("Interface\\AddOns\\ZoneMonitor\\alert_enter.ogg")  -- Replace with the path to your custom sound file for players entering
+        PlaySoundFile("Interface\\AddOns\\ZoneMonitor\\alert_enter.ogg")
     elseif alertType == "leave" then
-        PlaySoundFile("Interface\\AddOns\\ZoneMonitor\\alert_leave.ogg")  -- Replace with the path to your custom sound file for players leaving
+        PlaySoundFile("Interface\\AddOns\\ZoneMonitor\\alert_leave.ogg")
     end
 end
 
@@ -107,7 +120,7 @@ timerFrame:SetScript("OnUpdate", function(self, elapsed)
 
     if currentTime - lastUpdate >= interval then
         WhoQuery()
-        -- DEFAULT_CHAT_FRAME:AddMessage("ZoneMonitor: Checking who list...") -- Added chat message
+        -- DEFAULT_CHAT_FRAME:AddMessage("ZoneMonitor: Checking who list...")
         lastUpdate = currentTime
     elseif currentTime - lastUpdate >= whoScanDelay then
         local currentPlayerList = GetPlayerList()
