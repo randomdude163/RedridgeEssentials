@@ -52,7 +52,6 @@ local function hide_unwanted_minimap_elements()
 		"MinimapBorder",   -- Outer border
 		"MinimapBorderTop",
 		"MinimapNorthTag", -- Compass
-		"MiniMapWorldMapButton", -- World map button
 		"MinimapZoneTextButton", -- Zone text
 		"MinimapZoomIn",   -- Zoom in
 		"MinimapZoomOut",  -- Zoom out
