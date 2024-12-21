@@ -53,12 +53,10 @@ local function OnEvent(self, event, ...)
         local sessionStart = date("%H:%M")  -- Adjust the format according to your needs
         startTimeText:SetText("Session Start : " .. sessionStart)
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
-        local timestamp, eventType, hideCaster, sourceGUID, sourceName, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags = CombatLogGetCurrentEventInfo()
-        if eventType == "PARTY_KILL" then
-            -- Check if the victim was an enemy player
-            local destType, destRaidFlags, destIsPlayer = bit.band(destFlags, COMBATLOG_OBJECT_TYPE_MASK), bit.band(destRaidFlags, COMBATLOG_OBJECT_RAIDTARGET_MASK), bit.band(destFlags, COMBATLOG_OBJECT_CONTROL_PLAYER) == COMBATLOG_OBJECT_CONTROL_PLAYER
-            if destType == COMBATLOG_OBJECT_TYPE_PLAYER and destIsPlayer and bit.band(destFlags, COMBATLOG_OBJECT_REACTION_MASK) == COMBATLOG_OBJECT_REACTION_HOSTILE then
-                -- Increment the kill count and update the text string
+        local _, combatEvent, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags = CombatLogGetCurrentEventInfo()
+        if combatEvent == "UNIT_DIED" then
+            if bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) == COMBATLOG_OBJECT_TYPE_PLAYER and
+               bit.band(destFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) == COMBATLOG_OBJECT_REACTION_HOSTILE then
                 numKills = numKills + 1
                 myText:SetText("Player Kills    : " .. numKills)
                 
@@ -70,7 +68,7 @@ local function OnEvent(self, event, ...)
     end
 end
 
--- Register the event handler
+-- Register events
 myFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 myFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 myFrame:SetScript("OnEvent", OnEvent)
