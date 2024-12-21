@@ -1,6 +1,0 @@
-## Interface: 11305
-## Title: DisableXP
-## Notes: Shows a Popup to disable XP on login.
-## Version: 1.0
-## Author: Randomdude
-DisableXP.lua
