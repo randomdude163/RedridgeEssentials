@@ -1,9 +1,8 @@
--- Set up our frame
+-- This AddOn automatically flexes on enemy players who die in combat.
 local frame = CreateFrame("Frame", "AutoFartFrame")
 frame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 frame:RegisterEvent("ADDON_LOADED")
 
--- Handle events
 frame:SetScript("OnEvent", function(self, event, ...)	
 
 	if event == "COMBAT_LOG_EVENT_UNFILTERED" then

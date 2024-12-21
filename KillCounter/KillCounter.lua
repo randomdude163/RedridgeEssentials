@@ -1,33 +1,30 @@
 -- Create a new frame to display the number of honorable kills
-local myFrame = CreateFrame("Frame", "MyAddonFrame", UIParent)
-myFrame:SetSize(128, 64)
-myFrame:SetPoint("CENTER")
-myFrame:EnableMouse(true) -- Enable mouse interaction on the frame
-myFrame:SetMovable(true) -- Allow the frame to be moved
-myFrame:RegisterForDrag("LeftButton") -- Allow the frame to be dragged with the left mouse button
-myFrame:SetScript("OnDragStart", myFrame.StartMoving) -- Start moving the frame when dragging begins
-myFrame:SetScript("OnDragStop", myFrame.StopMovingOrSizing) -- Stop moving the frame when dragging stops
-myFrame:Show()
+local killStatisticsFrame = CreateFrame("Frame", "KillStatisticsFrame", UIParent)
+killStatisticsFrame:SetSize(128, 64)
+killStatisticsFrame:SetPoint("CENTER")
+killStatisticsFrame:EnableMouse(true) -- Enable mouse interaction on the frame
+killStatisticsFrame:SetMovable(true) -- Allow the frame to be moved
+killStatisticsFrame:RegisterForDrag("LeftButton") -- Allow the frame to be dragged with the left mouse button
+killStatisticsFrame:SetScript("OnDragStart", killStatisticsFrame.StartMoving) -- Start moving the frame when dragging begins
+killStatisticsFrame:SetScript("OnDragStop", killStatisticsFrame.StopMovingOrSizing) -- Stop moving the frame when dragging stops
+killStatisticsFrame:Show()
 
--- Create a new text string to display the number of honorable kills and kills per hour
-local myText = myFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+local myText = killStatisticsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 myText:SetPoint("LEFT", 0, 0)
 myText:SetText("Honorable Kills: 0")
 
-local killsPerHourText = myFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+local killsPerHourText = killStatisticsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 killsPerHourText:SetPoint("LEFT", 0, -15)
 killsPerHourText:SetText("Kills per hour: 0")
 
--- Create a new text string to display the session start time
-local startTimeText = myFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-startTimeText:SetPoint("LEFT", 0, -30)  -- Change position according to your needs
+local startTimeText = killStatisticsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+startTimeText:SetPoint("LEFT", 0, -30)
 startTimeText:SetText("Session Start: N/A")  -- This will be updated when session starts
 
--- Variables to track the number of kills and the time elapsed
 local numKills = 0
 local startTime = GetTime()
 
--- Function to update the kills per hour value
+
 local function UpdateKillsPerHour()
     local currentTime = GetTime()
     local elapsedTime = currentTime - startTime
@@ -35,7 +32,7 @@ local function UpdateKillsPerHour()
     killsPerHourText:SetText("Kills per hour: " .. killsPerHour)
 end
 
--- Create an event handler to count honorable kills and announce them to group chat
+
 local function OnEvent(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
         -- Reset the kill count when the player enters the world
@@ -49,9 +46,9 @@ local function OnEvent(self, event, ...)
             UpdateKillsPerHour()
         end)
 
-        -- Set start time and update the text string
-        local sessionStart = date("%H:%M")  -- Adjust the format according to your needs
+        local sessionStart = date("%H:%M")
         startTimeText:SetText("Session Start : " .. sessionStart)
+        
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
         local _, combatEvent, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags = CombatLogGetCurrentEventInfo()
         if combatEvent == "UNIT_DIED" then
@@ -69,6 +66,6 @@ local function OnEvent(self, event, ...)
 end
 
 -- Register events
-myFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-myFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-myFrame:SetScript("OnEvent", OnEvent)
+killStatisticsFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+killStatisticsFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+killStatisticsFrame:SetScript("OnEvent", OnEvent)
