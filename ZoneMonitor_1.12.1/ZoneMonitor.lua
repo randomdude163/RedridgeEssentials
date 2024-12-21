@@ -1,4 +1,5 @@
--- This AddOn monitors the zone the player is on for the arrival and departure of high level players.
+-- This AddOn for WoW 1.12.1 (not the modern Classic Client!) monitors the zone the player is in for the arrival
+-- and departure of high level players.
 -- It is intended for spy characters in PvP/Ganking zones like Redridge Mountains.
 
 -- It uses the /who command to get a list of players in the zone and compares it to the previous list to detect changes.
