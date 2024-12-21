@@ -8,9 +8,9 @@
 -- The level threshold for players to be considered is set to 32 by default, but can be changed in the code.
 -- The interval between /who queries is set to 10 seconds by default, but can also be changed in the code.
 
--- Adjust the levelThreshold and interval variables here.
+-- Adjust the levelThreshold and update interval here.
 local levelThreshold = 32
-local interval = 10 -- seconds
+local updateInterval = 10 -- seconds
 ---------------------------------------------------------
 
 
@@ -119,7 +119,7 @@ local timerFrame = CreateFrame("Frame")
 timerFrame:SetScript("OnUpdate", function(self, elapsed)
     local currentTime = GetTime()
 
-    if currentTime - lastUpdate >= interval then
+    if currentTime - lastUpdate >= updateInterval then
         WhoQuery()
         -- DEFAULT_CHAT_FRAME:AddMessage("ZoneMonitor: Checking who list...")
         lastUpdate = currentTime

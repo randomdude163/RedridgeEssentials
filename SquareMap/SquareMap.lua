@@ -1,14 +1,19 @@
-local escapes = {
-	["|c%x%x%x%x%x%x%x%x"] = "", -- color start
-	["|r"] = "",                 -- color end
-	["|H.-|h(.-)|h"] = "%1",     -- links
-	["|T.-|t"] = "",             -- textures
-	["{.-}"] = "",               -- raid target icons
-}
+-- This AddOn makes the minimap square and removes the frame, buttons and other stuff.
+-- It allows you to double-click Humanoid Tracking pips on the map to target the player.
+-- This is a port of the 1.12.1 AddOn BaumMap by EinBaum (https://github.com/EinBaum)
+-- to the modern Classic Client.
 
-targetBtn = CreateFrame("Button", "targetBtn", UIParent, "BaumMapSecureActionButtonTemplate")
+local targetBtn = CreateFrame("Button", "targetBtn", UIParent, "SquareMapSecureActionButtonTemplate")
 
 local function unescape(str)
+	local escapes = {
+		["|c%x%x%x%x%x%x%x%x"] = "", -- color start
+		["|r"] = "",              -- color end
+		["|H.-|h(.-)|h"] = "%1",  -- links
+		["|T.-|t"] = "",          -- textures
+		["{.-}"] = "",            -- raid target icons
+	}
+
 	for k, v in pairs(escapes) do
 		str = gsub(str, k, v)
 	end
@@ -16,7 +21,7 @@ local function unescape(str)
 	for substr in str:gmatch("%S+") do return substr end
 end
 
-function BM_Click_Target(button)
+local function square_map_click_target(button)
 	local name = GameTooltipTextLeft1:GetText()
 	if name then
 		name = unescape(name);
@@ -35,45 +40,23 @@ function BM_Click_Target(button)
 	end
 end
 
-function hide_clock()
+local function hide_minimap_clock_frame()
 	LoadAddOn("Blizzard_TimeManager")
 	local region = TimeManagerClockButton:GetRegions()
 	region:Hide()
 	TimeManagerClockButton:Hide()
 end
 
-function BM_Setup()
-	Minimap:SetScript("OnMouseUp", function(frame, button)
-		local name = GameTooltipTextLeft1:GetText()
-		if name then
-			if IsShiftKeyDown() then
-				Minimap_OnClick(frame, button)
-			else
-				BM_Click_Target(button)
-			end
-		else
-			Minimap_OnClick(frame, button)
-		end
-	end)
-
-	Minimap:EnableMouseWheel(true)
-	Minimap:SetScript("OnMouseWheel", function(frame, d)
-		if d > 0 then
-			MinimapZoomIn:Click()
-		elseif d < 0 then
-			MinimapZoomOut:Click()
-		end
-	end)
-
+local function hide_unwanted_minimap_elements()
 	local hideAll = {
-		"MinimapBorder",         -- Outer border
+		"MinimapBorder",   -- Outer border
 		"MinimapBorderTop",
-		"MinimapNorthTag",       -- Compass
+		"MinimapNorthTag", -- Compass
 		"MiniMapWorldMapButton", -- World map button
 		"MinimapZoneTextButton", -- Zone text
-		"MinimapZoomIn",         -- Zoom in
-		"MinimapZoomOut",        -- Zoom out
-		"GameTimeFrame",         -- Time button
+		"MinimapZoomIn",   -- Zoom in
+		"MinimapZoomOut",  -- Zoom out
+		"GameTimeFrame",   -- Time button
 		"SubZoneTextFrame",
 		"MinimapToggleButton"
 	}
@@ -83,15 +66,47 @@ function BM_Setup()
 		if element then
 			element:Hide()
 		else
-			print("UI element not found:", v) -- Debug message
+			print("UI element not found:", v)
 		end
 	end
 
-	Minimap:SetStaticPOIArrowTexture("")
-
-	Minimap:SetPoint("CENTER", UIParent, 0, -250)
-	Minimap:SetMaskTexture("Interface\\BUTTONS\\WHITE8X8")
-	hide_clock()
+	Minimap:SetStaticPOIArrowTexture("") -- remove arrow that points to nearest town
+	hide_minimap_clock_frame()
 end
 
-BM_Setup()
+local function enable_scroll_wheel_zooming()
+	Minimap:EnableMouseWheel(true)
+	Minimap:SetScript("OnMouseWheel", function(frame, d)
+		if d > 0 then
+			MinimapZoomIn:Click()
+		elseif d < 0 then
+			MinimapZoomOut:Click()
+		end
+	end)
+end
+
+local function center_minimap_and_make_square()
+	Minimap:SetPoint("CENTER", UIParent, 0, -250)
+	Minimap:SetMaskTexture("Interface\\BUTTONS\\WHITE8X8")
+end
+
+local function square_map_setup()
+	Minimap:SetScript("OnMouseUp", function(frame, button)
+		local name = GameTooltipTextLeft1:GetText()
+		if name then
+			if IsShiftKeyDown() then  -- Shift click to send ping
+				Minimap_OnClick(frame, button)
+			else
+				square_map_click_target(button)
+			end
+		else
+			Minimap_OnClick(frame, button)
+		end
+	end)
+
+	hide_unwanted_minimap_elements()
+	enable_scroll_wheel_zooming()
+	center_minimap_and_make_square()	
+end
+
+square_map_setup()

@@ -1,9 +1,7 @@
-## Interface: 20501
+## Interface: 11505
 ## Title: AutoFlex
 ## Notes: Automatically flexes on anyone in the enemy faction who dies near you.
 ## Author: <Redridge Police>
-## Version: 1.0
-## SavedVariables: NUM_PEOPLE_FARTED_ON
 
 AutoFlex.lua
 

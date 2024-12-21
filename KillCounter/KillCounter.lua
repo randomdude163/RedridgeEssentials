@@ -1,4 +1,10 @@
--- Create a new frame to display the number of honorable kills
+-- This AddOn counts the number of player kills since login and announces each kill
+-- in the party chat. You can adjust the kill announce message to your liking.
+-- "Enemyplayername" will be replaced with the name of the player that was killed.
+PlayerKillMessage = "Enemyplayername killed!"
+------------------------------------------------------------------------
+
+
 local killStatisticsFrame = CreateFrame("Frame", "KillStatisticsFrame", UIParent)
 killStatisticsFrame:SetSize(128, 64)
 killStatisticsFrame:SetPoint("CENTER")
@@ -9,9 +15,9 @@ killStatisticsFrame:SetScript("OnDragStart", killStatisticsFrame.StartMoving) --
 killStatisticsFrame:SetScript("OnDragStop", killStatisticsFrame.StopMovingOrSizing) -- Stop moving the frame when dragging stops
 killStatisticsFrame:Show()
 
-local myText = killStatisticsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-myText:SetPoint("LEFT", 0, 0)
-myText:SetText("Honorable Kills: 0")
+local playerKillsText = killStatisticsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+playerKillsText:SetPoint("LEFT", 0, 0)
+playerKillsText:SetText("Honorable Kills: 0")
 
 local killsPerHourText = killStatisticsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 killsPerHourText:SetPoint("LEFT", 0, -15)
@@ -36,7 +42,7 @@ end
 local function OnEvent(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
         -- Reset the kill count when the player enters the world
-        myText:SetText("Player Kills    : 0")
+        playerKillsText:SetText("Player Kills    : 0")
         numKills = 0
         startTime = GetTime()
         UpdateKillsPerHour()
@@ -55,10 +61,10 @@ local function OnEvent(self, event, ...)
             if bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) == COMBATLOG_OBJECT_TYPE_PLAYER and
                bit.band(destFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) == COMBATLOG_OBJECT_REACTION_HOSTILE then
                 numKills = numKills + 1
-                myText:SetText("Player Kills    : " .. numKills)
+                playerKillsText:SetText("Player Kills    : " .. numKills)
                 
                 -- Announce the kill to group chat
-                local killMessage = string.gsub("Enemyplayername abgeknallt!", "Enemyplayername", destName)
+                local killMessage = string.gsub(PlayerKillMessage, "Enemyplayername", destName)
                 SendChatMessage(killMessage, "PARTY")
             end
         end

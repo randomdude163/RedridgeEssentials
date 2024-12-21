@@ -1,7 +1,6 @@
-## Interface: 11200
+## Interface: 11505
 ## Title: SquareMap
-## Notes: Square Minimap. Double-click tracking pips to target.
-## Author: <Redridge Police>
-## Version: 1.0
+## Notes: Square Minimap. Double-click tracking pips to target players.
+## Author: Severussnipe <Redridge Police>
 SquareMap.xml
 SquareMap.lua

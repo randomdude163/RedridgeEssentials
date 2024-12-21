@@ -1,5 +1,5 @@
-## Interface: 11200
+## Interface: 11201
 ## Title: Zone Monitor
 ## Notes: Monitors the current zone and alerts when high-level players are incoming or leaving.
-## Author: YourName
+## Author: Severussnipe <Redridge Police>
 ZoneMonitor.lua

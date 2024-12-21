@@ -1,7 +1,6 @@
-## Interface: 20501
+## Interface: 11505
 ## Title: LifetimeKillsAlert
-## Notes: Gives you an alert at 11111 lifetime honorable kills
-## Author: <Redridge Police>
-## Version: 1.0
+## Notes: Gives you an alert at a specific number of lifetime honorable kills
+## Author: Severussnipe <Redridge Police>
 
 LifetimeKillsAlert.lua
