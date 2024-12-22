@@ -14,6 +14,9 @@ Removes UI elements like buttons and frame from the minimap to make it square an
 
 <img src="images/square_minimap.png" width="300"/>
 
+## RogueTargetMacro
+This AddOn creates and updates a macro for targeting the highest level rogue you kill during a fight. The macro is updated automatically after every fight as soon as you leave combat. The macro targets the rogue, casts Hunter's Mark, sends your pet to attack, and casts Arcane Shot. You can bind this macro to your action bar and use it to easily corpse camp rogues: Just spam this macro while you wait for him to resurrect. However, I do not endorse this behavior in any way!
+
 ## LifetimeKillsAlert
 This AddOn notifies you once you reach a certain number of lifetime honorable kills. Useful if you want to make a screenshot of a specific number of honorable kills. You can modify the alert threshold in the first line of code in the *LifetimeKillsAlert.lua* file.
 

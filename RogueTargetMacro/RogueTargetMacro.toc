@@ -1,0 +1,6 @@
+## Interface: 11505
+## Title: Rogue Target Macro
+## Notes: Updates a target macro for enemy rogues
+## Author: Severussnipe
+
+RogueTargetMacro.lua
