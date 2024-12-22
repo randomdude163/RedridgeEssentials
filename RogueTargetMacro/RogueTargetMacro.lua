@@ -21,7 +21,7 @@ local function UpdateMacro(rogueName)
     local macroIndex = GetMacroIndexByName("RogueTarget")
     if macroIndex > 0 then
         EditMacro(macroIndex, nil, nil, macroText)
-        print("Macro updated with rogue name: " .. rogueName)
+        print("Rogue Target Macro updated with name: " .. rogueName)
     else
         print("Error: Macro 'RogueTarget' not found.")
     end
