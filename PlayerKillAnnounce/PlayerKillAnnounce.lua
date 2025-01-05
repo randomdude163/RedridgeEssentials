@@ -10,10 +10,10 @@ PlayerKillAnnounceDB = PlayerKillAnnounceDB or {}
 local playerKillAnnounceFrame = CreateFrame("Frame", "PlayerKillAnnounceFrame", UIParent)
 playerKillAnnounceFrame:SetSize(128, 64)
 playerKillAnnounceFrame:SetPoint("CENTER")
-playerKillAnnounceFrame:EnableMouse(true) -- Enable mouse interaction on the frame
-playerKillAnnounceFrame:SetMovable(true) -- Allow the frame to be moved
-playerKillAnnounceFrame:RegisterForDrag("LeftButton") -- Allow the frame to be dragged with the left mouse button
-playerKillAnnounceFrame:SetScript("OnDragStart", playerKillAnnounceFrame.StartMoving) -- Start moving the frame when dragging begins
+playerKillAnnounceFrame:EnableMouse(true)                                                   -- Enable mouse interaction on the frame
+playerKillAnnounceFrame:SetMovable(true)                                                    -- Allow the frame to be moved
+playerKillAnnounceFrame:RegisterForDrag("LeftButton")                                       -- Allow the frame to be dragged with the left mouse button
+playerKillAnnounceFrame:SetScript("OnDragStart", playerKillAnnounceFrame.StartMoving)       -- Start moving the frame when dragging begins
 playerKillAnnounceFrame:SetScript("OnDragStop", playerKillAnnounceFrame.StopMovingOrSizing) -- Stop moving the frame when dragging stops
 playerKillAnnounceFrame:Show()
 
@@ -27,7 +27,7 @@ killsPerHourText:SetText("Kills per hour: 0")
 
 local startTimeText = playerKillAnnounceFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 startTimeText:SetPoint("LEFT", 0, -30)
-startTimeText:SetText("Session Start: N/A")  -- This will be updated when session starts
+startTimeText:SetText("Session Start: N/A") -- This will be updated when session starts
 
 local numKills = 0
 local startTime = GetTime()
@@ -50,7 +50,6 @@ local function UpdateKillsPerHour()
     killsPerHourText:SetText("Kills per hour: " .. killsPerHour)
 end
 
-
 local function OnEvent(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
         LoadSettings()
@@ -59,7 +58,7 @@ local function OnEvent(self, event, ...)
         numKills = 0
         startTime = GetTime()
         UpdateKillsPerHour()
-        
+
         -- Start the timer to update the kills per hour value every second
         self:SetScript("OnUpdate", function(self, elapsed)
             UpdateKillsPerHour()
@@ -67,15 +66,15 @@ local function OnEvent(self, event, ...)
 
         local sessionStart = date("%H:%M")
         startTimeText:SetText("Session Start : " .. sessionStart)
-        
     elseif event == "COMBAT_LOG_EVENT_UNFILTERED" then
-        local _, combatEvent, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags = CombatLogGetCurrentEventInfo()
+        local _, combatEvent, _, sourceGUID, sourceName, sourceFlags, _, destGUID, destName, destFlags =
+        CombatLogGetCurrentEventInfo()
         if combatEvent == "UNIT_DIED" then
             if bit.band(destFlags, COMBATLOG_OBJECT_TYPE_PLAYER) == COMBATLOG_OBJECT_TYPE_PLAYER and
-               bit.band(destFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) == COMBATLOG_OBJECT_REACTION_HOSTILE then
+                bit.band(destFlags, COMBATLOG_OBJECT_REACTION_HOSTILE) == COMBATLOG_OBJECT_REACTION_HOSTILE then
                 numKills = numKills + 1
                 playerKillsText:SetText("Player Kills    : " .. numKills)
-                
+
                 -- Announce the kill to group chat
                 if EnableKillAnnounce then
                     local killMessage = string.gsub(PlayerKillMessage, "Enemyplayername", destName)
