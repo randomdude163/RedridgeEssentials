@@ -5,40 +5,40 @@ PlayerKillMessage = "Enemyplayername killed!"
 ------------------------------------------------------------------------
 
 
-local killStatisticsFrame = CreateFrame("Frame", "KillStatisticsFrame", UIParent)
-killStatisticsFrame:SetSize(128, 64)
-killStatisticsFrame:SetPoint("CENTER")
-killStatisticsFrame:EnableMouse(true) -- Enable mouse interaction on the frame
-killStatisticsFrame:SetMovable(true) -- Allow the frame to be moved
-killStatisticsFrame:RegisterForDrag("LeftButton") -- Allow the frame to be dragged with the left mouse button
-killStatisticsFrame:SetScript("OnDragStart", killStatisticsFrame.StartMoving) -- Start moving the frame when dragging begins
-killStatisticsFrame:SetScript("OnDragStop", killStatisticsFrame.StopMovingOrSizing) -- Stop moving the frame when dragging stops
-killStatisticsFrame:Show()
+local playerKillAnnounceFrame = CreateFrame("Frame", "PlayerKillAnnounceFrame", UIParent)
+playerKillAnnounceFrame:SetSize(128, 64)
+playerKillAnnounceFrame:SetPoint("CENTER")
+playerKillAnnounceFrame:EnableMouse(true) -- Enable mouse interaction on the frame
+playerKillAnnounceFrame:SetMovable(true) -- Allow the frame to be moved
+playerKillAnnounceFrame:RegisterForDrag("LeftButton") -- Allow the frame to be dragged with the left mouse button
+playerKillAnnounceFrame:SetScript("OnDragStart", playerKillAnnounceFrame.StartMoving) -- Start moving the frame when dragging begins
+playerKillAnnounceFrame:SetScript("OnDragStop", playerKillAnnounceFrame.StopMovingOrSizing) -- Stop moving the frame when dragging stops
+playerKillAnnounceFrame:Show()
 
-local playerKillsText = killStatisticsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+local playerKillsText = playerKillAnnounceFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 playerKillsText:SetPoint("LEFT", 0, 0)
 playerKillsText:SetText("Honorable Kills: 0")
 
-local killsPerHourText = killStatisticsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+local killsPerHourText = playerKillAnnounceFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 killsPerHourText:SetPoint("LEFT", 0, -15)
 killsPerHourText:SetText("Kills per hour: 0")
 
-local startTimeText = killStatisticsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+local startTimeText = playerKillAnnounceFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
 startTimeText:SetPoint("LEFT", 0, -30)
 startTimeText:SetText("Session Start: N/A")  -- This will be updated when session starts
 
 local numKills = 0
 local startTime = GetTime()
-local KillCounterDB = KillCounterDB or {}
-local EnableKillAnnounce = KillCounterDB.EnableKillAnnounce or true
+local PlayerKillAnnounceDB = PlayerKillAnnounceDB or {}
+local EnableKillAnnounce = PlayerKillAnnounceDB.EnableKillAnnounce or true
 
 local function SaveSettings()
-    KillCounterDB.EnableKillAnnounce = EnableKillAnnounce
+    PlayerKillAnnounceDB.EnableKillAnnounce = EnableKillAnnounce
 end
 
 local function LoadSettings()
-    if KillCounterDB.EnableKillAnnounce ~= nil then
-        EnableKillAnnounce = KillCounterDB.EnableKillAnnounce
+    if PlayerKillAnnounceDB.EnableKillAnnounce ~= nil then
+        EnableKillAnnounce = PlayerKillAnnounceDB.EnableKillAnnounce
     end
 end
 
@@ -86,13 +86,13 @@ local function OnEvent(self, event, ...)
 end
 
 -- Register events
-killStatisticsFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
-killStatisticsFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-killStatisticsFrame:SetScript("OnEvent", OnEvent)
+playerKillAnnounceFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
+playerKillAnnounceFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+playerKillAnnounceFrame:SetScript("OnEvent", OnEvent)
 
-SLASH_KILLCOUNTER1 = "/killcounter"
-SLASH_KILLCOUNTER2 = "/kc"
-SlashCmdList["KILLCOUNTER"] = function(msg)
+SLASH_PLAYERKILLANNOUNCE1 = "/playerkillannounce"
+SLASH_PLAYERKILLANNOUNCE2 = "/pka"
+SlashCmdList["PLAYERKILLANNOUNCE"] = function(msg)
     if msg == "toggle" then
         EnableKillAnnounce = not EnableKillAnnounce
         SaveSettings()
@@ -102,6 +102,6 @@ SlashCmdList["KILLCOUNTER"] = function(msg)
             print("Kill announce messages are now DISABLED.")
         end
     else
-        print("Usage: /killcounter toggle")
+        print("Usage: /playerkillannounce toggle")
     end
 end

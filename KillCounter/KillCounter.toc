@@ -1,5 +1,0 @@
-## Interface: 11505
-## Title: Kill Counter
-## Author: Severussnipe, Hkfarmer <Redridge Police>
-## Notes: Counts enemy player kills per session/hour and announces kills in the party chat.
-KillCounter.lua
