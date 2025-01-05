@@ -2,4 +2,5 @@
 ## Title: Player Kill Announce
 ## Author: Severussnipe, Hkfarmer <Redridge Police>
 ## Notes: Counts enemy player kills per session/hour and announces player kills in the party chat.
+## SavedVariables: PlayerKillAnnounceDB
 PlayerKillAnnounce.lua

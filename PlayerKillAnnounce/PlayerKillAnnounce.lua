@@ -4,6 +4,8 @@
 PlayerKillMessage = "Enemyplayername killed!"
 ------------------------------------------------------------------------
 
+-- Declare the saved variable
+PlayerKillAnnounceDB = PlayerKillAnnounceDB or {}
 
 local playerKillAnnounceFrame = CreateFrame("Frame", "PlayerKillAnnounceFrame", UIParent)
 playerKillAnnounceFrame:SetSize(128, 64)
@@ -29,7 +31,6 @@ startTimeText:SetText("Session Start: N/A")  -- This will be updated when sessio
 
 local numKills = 0
 local startTime = GetTime()
-local PlayerKillAnnounceDB = PlayerKillAnnounceDB or {}
 local EnableKillAnnounce = PlayerKillAnnounceDB.EnableKillAnnounce or true
 
 local function SaveSettings()
