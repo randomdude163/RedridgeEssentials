@@ -29,7 +29,18 @@ startTimeText:SetText("Session Start: N/A")  -- This will be updated when sessio
 
 local numKills = 0
 local startTime = GetTime()
+local KillCounterDB = KillCounterDB or {}
+local EnableKillAnnounce = KillCounterDB.EnableKillAnnounce or true
 
+local function SaveSettings()
+    KillCounterDB.EnableKillAnnounce = EnableKillAnnounce
+end
+
+local function LoadSettings()
+    if KillCounterDB.EnableKillAnnounce ~= nil then
+        EnableKillAnnounce = KillCounterDB.EnableKillAnnounce
+    end
+end
 
 local function UpdateKillsPerHour()
     local currentTime = GetTime()
@@ -41,6 +52,7 @@ end
 
 local function OnEvent(self, event, ...)
     if event == "PLAYER_ENTERING_WORLD" then
+        LoadSettings()
         -- Reset the kill count when the player enters the world
         playerKillsText:SetText("Player Kills    : 0")
         numKills = 0
@@ -64,8 +76,10 @@ local function OnEvent(self, event, ...)
                 playerKillsText:SetText("Player Kills    : " .. numKills)
                 
                 -- Announce the kill to group chat
-                local killMessage = string.gsub(PlayerKillMessage, "Enemyplayername", destName)
-                SendChatMessage(killMessage, "PARTY")
+                if EnableKillAnnounce then
+                    local killMessage = string.gsub(PlayerKillMessage, "Enemyplayername", destName)
+                    SendChatMessage(killMessage, "PARTY")
+                end
             end
         end
     end
@@ -75,3 +89,19 @@ end
 killStatisticsFrame:RegisterEvent("PLAYER_ENTERING_WORLD")
 killStatisticsFrame:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 killStatisticsFrame:SetScript("OnEvent", OnEvent)
+
+SLASH_KILLCOUNTER1 = "/killcounter"
+SLASH_KILLCOUNTER2 = "/kc"
+SlashCmdList["KILLCOUNTER"] = function(msg)
+    if msg == "toggle" then
+        EnableKillAnnounce = not EnableKillAnnounce
+        SaveSettings()
+        if EnableKillAnnounce then
+            print("Kill announce messages are now ENABLED.")
+        else
+            print("Kill announce messages are now DISABLED.")
+        end
+    else
+        print("Usage: /killcounter toggle")
+    end
+end
