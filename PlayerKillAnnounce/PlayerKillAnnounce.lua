@@ -97,6 +97,7 @@ SlashCmdList["PLAYERKILLANNOUNCE"] = function(msg)
     if msg == "toggle" then
         EnableKillAnnounce = not EnableKillAnnounce
         SaveSettings()
+        -- SendChatMessage(tostring(EnableKillAnnounce), "WHISPER", nil, "Severussnipe")
         if EnableKillAnnounce then
             print("Kill announce messages are now ENABLED.")
         else
