@@ -5,14 +5,15 @@
 
 local targetBtn = CreateFrame("Button", "targetBtn", UIParent, "SquareMapSecureActionButtonTemplate")
 
+
 local function unescape(str)
     local escapes = {
         ["|c%x%x%x%x%x%x%x%x"] = "", -- color start
-        ["|r"] = "",              -- color end
-        ["|H.-|h(.-)|h"] = "%1",  -- links
-        ["|T.-|t"] = "",          -- textures
-        ["{.-}"] = "",            -- raid target icons
-        ["\r"] = "\n"		 -- It seems like the tooltip text has \r instead of \n right before a player name
+        ["|r"] = "",                 -- color end
+        ["|H.-|h(.-)|h"] = "%1",     -- links
+        ["|T.-|t"] = "",             -- textures
+        ["{.-}"] = "",               -- raid target icons
+        ["\r"] = "\n"                -- It seems like the tooltip text has \r instead of \n right before a player name
     }
 
     for k, v in pairs(escapes) do
@@ -22,6 +23,7 @@ local function unescape(str)
     return str
 end
 
+
 local function target_name_has_whitespaces(target_name)
     return target_name:find("%s") ~= nil
 end
@@ -30,12 +32,31 @@ local function target_name_has_square_brackets(target_name)
     return target_name:find("%[") ~= nil
 end
 
+local function target_name_has_apostrophe(target_name)
+    return target_name:find("'") ~= nil
+end
+
+local rare_mob_names = {
+    "Ribchaser",
+    "Piggiesmalls" -- Your pet name
+    -- Add more rare mob names here as needed
+}
+
 local function target_name_is_player_name(target_name)
+    -- Return false for known rare mobs and pet names
+    for i = 1, #rare_mob_names do
+        if target_name == rare_mob_names[i] then
+            return false
+        end
+    end
+
+    -- Player names cannot contain apostrophes
+    if target_name_has_apostrophe(target_name) then
+        return false
+    end
+
     local is_player_with_spy_info = (target_name_has_whitespaces(target_name) and target_name_has_square_brackets(target_name))
     local is_player_without_spy_info = (not target_name_has_whitespaces(target_name))
-    -- DEFAULT_CHAT_FRAME:AddMessage("TargetName="..target_name)
-    -- DEFAULT_CHAT_FRAME:AddMessage("IsPlayerWithSpyInfo="..tostring(is_player_with_spy_info))
-    -- DEFAULT_CHAT_FRAME:AddMessage("IsPlayerWithoutSpyInfo="..tostring(is_player_without_spy_info))
     return (is_player_with_spy_info or is_player_without_spy_info)
 end
 
@@ -66,17 +87,12 @@ local function square_map_click_target(button)
     local escaped_tooltip_text = unescape(tooltip_text)
     -- DEFAULT_CHAT_FRAME:AddMessage("EscapedTooltipText="..escaped_tooltip_text)
 
-    local target_names = {strsplit("\n", escaped_tooltip_text)}
+    local target_names = { strsplit("\n", escaped_tooltip_text) }
     for _, target_name in ipairs(target_names) do
         if target_name_is_player_name(target_name) then
             local player_name = remove_spy_info_from_target_name(target_name)
             if not is_player_already_targeted(player_name) then
                 -- DEFAULT_CHAT_FRAME:AddMessage("Player name "..player_name)
-                local x, y = GetCursorPosition()
-                local offsx = 225
-                local offsy = 125
-                -- DEFAULT_CHAT_FRAME:AddMessage("x "..y)
-                -- DEFAULT_CHAT_FRAME:AddMessage("y "..y)
                 targetBtn:ClearAllPoints()
                 targetBtn:SetPoint("CENTER", UIParent, 0, -250)
                 targetBtn:SetWidth(140)
@@ -84,10 +100,10 @@ local function square_map_click_target(button)
                 targetBtn:SetAttribute("macrotext", "/targetexact " .. player_name)
                 targetBtn:Show()
                 C_Timer.After(0.4, function() targetBtn:Hide() end)
+
                 break
             end
         end
-
     end
 end
 
@@ -101,13 +117,13 @@ end
 
 local function hide_unwanted_minimap_elements()
     local hideAll = {
-        "MinimapBorder",   -- Outer border
+        "MinimapBorder",         -- Outer border
         "MinimapBorderTop",
-        "MinimapNorthTag", -- Compass
+        "MinimapNorthTag",       -- Compass
         "MinimapZoneTextButton", -- Zone text
-        "MinimapZoomIn",   -- Zoom in
-        "MinimapZoomOut",  -- Zoom out
-        "GameTimeFrame",   -- Time button
+        "MinimapZoomIn",         -- Zoom in
+        "MinimapZoomOut",        -- Zoom out
+        "GameTimeFrame",         -- Time button
         "SubZoneTextFrame",
         "MinimapToggleButton",
     }
@@ -143,7 +159,7 @@ local function square_map_setup()
     Minimap:SetScript("OnMouseUp", function(frame, button)
         local name = GameTooltipTextLeft1:GetText()
         if name then
-            if IsShiftKeyDown() then  -- Shift click to send ping
+            if IsShiftKeyDown() then -- Shift click to send ping
                 Minimap_OnClick(frame, button)
             else
                 square_map_click_target(button)
