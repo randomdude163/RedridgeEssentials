@@ -5,6 +5,11 @@
 
 local targetBtn = CreateFrame("Button", "targetBtn", UIParent, "SquareMapSecureActionButtonTemplate")
 
+local RARE_MOB_NAMES = {
+    "Ribchaser",
+    "Piggiesmalls",
+    "Squiddic"
+}
 
 local function unescape(str)
     local escapes = {
@@ -36,21 +41,14 @@ local function target_name_has_apostrophe(target_name)
     return target_name:find("'") ~= nil
 end
 
-local rare_mob_names = {
-    "Ribchaser",
-    "Piggiesmalls" -- Your pet name
-    -- Add more rare mob names here as needed
-}
 
 local function target_name_is_player_name(target_name)
-    -- Return false for known rare mobs and pet names
-    for i = 1, #rare_mob_names do
-        if target_name == rare_mob_names[i] then
+    for i = 1, #RARE_MOB_NAMES do
+        if target_name == RARE_MOB_NAMES[i] then
             return false
         end
     end
 
-    -- Player names cannot contain apostrophes
     if target_name_has_apostrophe(target_name) then
         return false
     end
