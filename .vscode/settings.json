@@ -20,6 +20,7 @@
         "StaticPopupDialogs",
         "StaticPopup_Show",
         "MAX_CHARACTER_MACROS",
-        "TimeManagerClockButton"
+        "TimeManagerClockButton",
+        "SettingsPanel"
     ]
 }

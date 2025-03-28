@@ -148,7 +148,23 @@ local function enable_scroll_wheel_zooming()
     end)
 end
 
+local function make_minimap_draggable()
+    Minimap:SetMovable(true)
+    Minimap:RegisterForDrag("LeftButton")
+
+    Minimap:SetScript("OnDragStart", function(self)
+        if IsControlKeyDown() then
+            self:StartMoving()
+        end
+    end)
+
+    Minimap:SetScript("OnDragStop", function(self)
+        self:StopMovingOrSizing()
+    end)
+end
+
 local function position_minimap_and_make_square()
+    -- Minimap:ClearAllPoints()
     Minimap:SetPoint("CENTER", UIParent, 0, -250)
     Minimap:SetMaskTexture("Interface\\BUTTONS\\WHITE8X8")
 end
@@ -169,6 +185,7 @@ local function square_map_setup()
 
     hide_unwanted_minimap_elements()
     enable_scroll_wheel_zooming()
+    make_minimap_draggable()
     position_minimap_and_make_square()
 end
 
